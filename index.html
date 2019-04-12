@@ -1,268 +1,65 @@
 
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>电视直播</title>
+<title>電視直播</title>
+<meta charset="utf-8">
+<meta name="application-name" content="網路電視直播手機版,IPTV電視直播手機版" />
+<meta name="title" content="電視直播"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="網路電視,電視直播,手機版,電視,免費電視">
+<meta name="description" content="網路電視,全球電視直播,高清電視,免費電視,IPTV電視直播手機版">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
 <style type="text/css">
-body {
-  margin: 0;
-  color: #444;
-  background-color: #eee;
-}
-h1 {
-  text-align: center;
-  color: #eee;
-  background-color: #444;
-  margin: 0;
-  padding: 0.5em 0;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.07);
-}
-ul#main {
-  max-width: 1000px;
-  margin: 0px auto;
-  padding: 0;
-  padding-left: 30px;
-  overflow: auto;
-  list-style: outside none none;
-  text-align: center;
-}
-ul#main li {
-  width: 220px;
-  float: left;
-  padding: 0px;
-  margin: 30px 30px 0px 0px;
-  background-color: #fff;
-  border-radius: 3px;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.07);
-  overflow: hidden;
-}
-ol {
-  max-width: 970px;
-  margin: 0 auto;
-  font-size: 12px;
-}
-a.pc, a.mac {
-  display: block;
-  width: 50%;
-  text-decoration: none;
-  transition: all ease-in 0.25s;
-}
-a.pc {
-  background-color: rgb(79,126,255);
-  color: #eee;
-  float: left;
-}
-a.pc:hover {
-  background-color: #444;
-}
-a.mac {
-  color: #444;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAYAAAABxvaqAAAAVElEQVQImQXBWw7AEABFwbv/PRI0iIqKR/g8nRGA7r3onIP23mitheacaIyBeu/o+z7UWkO1VvS+LyqloJwzSimhGCN6ngeFEJD3HjnnkLUWGWP4Af+QUn4NA45gAAAAAElFTkSuQmCC);
-  background-repeat: repeat-x;
-  float: right;
-}
-a.mac:hover {
-  color: #0385FF;
-}
-div#footer {
-  color: #eee;
-  background-color: #444;
-  margin-top: 30px;
-  padding: 30px 0;
-}
+.warning {display: none;}
+.warning a{ float: left;}
+.warning #msg { float: left; width: 90%; font-size: 0.9em;}
+.headerNfooter {background-color: #C00;color: #fff;text-shadow: none;}
+.headerNfooter a:link,.headerNfooter a:hover,.headerNfooter a:visited,.headerNfooter a:active { color: #fff; text-decoration: none;}
+.headerNfooter h1 {text-indent: -999em; }
 </style>
-</head>
-
 <body>
-  <h1>
-    电视直播
-  </h1>
-  <ul id="main">
-  	    <li>
-      <h4>CCTV-1高清</h4>
-      <a href="http://218.94.137.117/hls/njaucctv1hd.m3u8" target="_blank" class="pc">源1</a>
-      <a href="rtsp://113.136.42.45:554/PLTV/88888888/224/3221226087/10000100000000060000000001759104_0.smil" target="_blank" class="mac">源2</a>
-    </li>
-    <li>
-      <h4>CCTV-3高清(NJAU)</h4>
-      <a href="player2.html?channel=njaucctv3hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaucctv3hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-5高清(NJAU)</h4>
-      <a href="player2.html?channel=njaucctv5hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaucctv5hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-5+高清(NJAU)</h4>
-      <a href="player2.html?channel=njaucctv5phd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaucctv5phd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-6高清(NJAU)</h4>
-      <a href="player2.html?channel=njaucctv6hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaucctv6hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-8高清(NJAU)</h4>
-      <a href="player2.html?channel=njaucctv8hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaucctv8hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-     <li>
-      <h4>北京卫视 (NJAU)</h4>
-      <a href="player2.html?channel=njaubjtvhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaubjtvhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>东方卫视 (NJAU)</h4>
-      <a href="player2.html?channel=njaudfwshd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaudfwshd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>浙江卫视(NJAU)</h4>
-      <a href="player2.html?channel=njauzjwshd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njauzjwshd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>南京新闻(NJAU)</h4>
-      <a href="player2.html?channel=njaunjxwhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/njaunjxwhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-1高清</h4>
-      <a href="player.html?channel=cctv1hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/cctv1hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-3高清</h4>
-      <a href="player.html?channel=cctv3hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/cctv3hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-5高清</h4>
-      <a href="player.html?channel=cctv5hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/cctv5hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-5+高清</h4>
-      <a href="player.html?channel=cctv5phd" target="_blank" class="pc">PC端</a>
-      <a href="hls/cctv5phd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-6高清</h4>
-      <a href="player.html?channel=cctv6hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/cctv6hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CCTV-8高清</h4>
-      <a href="player.html?channel=cctv8hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/cctv8hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>CHC高清电影</h4>
-      <a href="player.html?channel=chchd" target="_blank" class="pc">PC端</a>
-      <a href="hls/chchd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>北京卫视高清</h4>
-      <a href="player.html?channel=btv1hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/btv1hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>北京文艺高清</h4>
-      <a href="player.html?channel=btv2hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/btv2hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>北京体育高清</h4>
-      <a href="player.html?channel=btv6hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/btv6hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>北京纪实高清</h4>
-      <a href="player.html?channel=btv11hd" target="_blank" class="pc">PC端</a>
-      <a href="hls/btv11hd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>湖南卫视高清</h4>
-      <a href="player.html?channel=hunanhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/hunanhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>浙江卫视高清</h4>
-      <a href="player.html?channel=zjhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/zjhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>江苏卫视高清</h4>
-      <a href="player.html?channel=jshd" target="_blank" class="pc">PC端</a>
-      <a href="hls/jshd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>东方卫视高清</h4>
-      <a href="player.html?channel=dfhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/dfhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>安徽卫视高清</h4>
-      <a href="player.html?channel=ahhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/ahhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>黑龙江卫视高清</h4>
-      <a href="player.html?channel=hljhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/hljhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>辽宁卫视高清</h4>
-      <a href="player.html?channel=lnhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/lnhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>深圳卫视高清</h4>
-      <a href="player.html?channel=szhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/szhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>广东卫视高清</h4>
-      <a href="player.html?channel=gdhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/gdhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>天津卫视高清</h4>
-      <a href="player.html?channel=tjhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/tjhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>湖北卫视高清</h4>
-      <a href="player.html?channel=hbhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/hbhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-    <li>
-      <h4>山东卫视高清</h4>
-      <a href="player.html?channel=sdhd" target="_blank" class="pc">PC端</a>
-      <a href="hls/sdhd.m3u8" target="_blank" class="mac">移动端</a>
-    </li>
-  </ul>
-  <div id='footer'>
-    <ol>
-      <li>PC链接播放需要您的浏览器支持Flash控件。</li>
-      <li>移动端链接播放需要您的播放设备支持Http Live Streaming技术，支持IOS和安卓系统，建议使用系统自带浏览器播放。</li>
-      <li>本次高清直播来源网络，仅供校内有线网络测试使用，本站不能保证其长期稳定服务。</li>
-      <li>建议使用IE7+，Chrome，Firefox等主流浏览器进行浏览。</li>
-    </ol>
+<div data-role="page">
+<div class="headerNfooter" data-role="header" data-theme="f" data-position="fixed">
+<h1>電視直播</h1><a href="javascript:history.back()" data-iconpos="left" data-icon="back">返回</a>
+<a href="?act=home" data-icon="home" data-role="button" data-inline="true">首頁</a>
+</div>
+<!--top--><div data-role="content"><div align="center">這麽好的網路電視，一定要分享給朋友哦。</div><div align="center">網站支持手機,IPad,安卓平板電腦觀看電視直播</div><ul data-role="listview" data-inset="true" data-divider-theme="a"><li><a href="?tid=itv" data-ajax="false">綜合</a></li>
+<li><a href="https://wuyanzhijian.github.io/456/tiyu.html" data-ajax="false">體育</a></li>
+<li><a href="?tid=ys" data-ajax="false">央視</a></li>
+<li><a href="?tid=ws" data-ajax="false">衛視</a></li>
+<li><a href="?tid=movie" data-ajax="false">電影</a></li>
+<li><a href="?tid=bst" data-ajax="false">高清直播</a></li>
+<li><a href="?tid=migu" data-ajax="false">咪咕视频</a></li>
+<li><a href="?tid=pyitv" data-ajax="false">南方IPTV</a></li>
+<li><a href="?tid=nxiptv" data-ajax="false">宁夏有线</a></li>
+<li><a href="?tid=yq" data-ajax="false">阳泉IPTV</a></li>
+<li><a href="?tid=bfiptv" data-ajax="false">北方云IPTV</a></li>
+<li><a href="?tid=tt" data-ajax="false">天途云IPTV</a></li>
+<li><a href="?tid=pyao" data-ajax="false">铁通IPTV</a></li>
+<li><a href="?tid=ltiptv" data-ajax="false">联通IPTV</a></li>
+<li><a href="?tid=hbitv" data-ajax="false">湖北移動IPTV</a></li>
+<li><a href="?tid=njitv" data-ajax="false">江苏移動IPTV</a></li>
+<li><a href="?tid=fjitv" data-ajax="false">福建移動IPTV</a></li>
+<li><a href="?tid=lnitv" data-ajax="false">遼寧移動IPTV</a></li>
+<li><a href="?tid=hlitv" data-ajax="false">黑龍江移動IPTV</a></li></ul></div>
+ <!--end--> 
+  <div data-role="footer">
+    <h4>版權聲明 &copy; 所有源來源於互聯網搜索</h4>
   </div>
-<script type="text/javascript">
-var main = document.getElementById('main');
-var f = function () {
-  c = parseInt((window.innerWidth - 30) / 250);
-  column = c < 4 ? c : 4;
-  main.style.width = column * 250 + 'px';
-}
-window.onresize = f;
-f();
-</script>
+</div>
+<div id="fb-root"></div>
 </body>
+<span style="display:none">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src='https://www.googletagmanager.com/gtag/js?id=UA-120439249-1'></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-120439249-1');
+</script><script src="https://s13.cnzz.com/z_stat.php?id=1273922221&web_id=1273922221" language="JavaScript"></script>
+</span>
 </html>
