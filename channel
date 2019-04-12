@@ -205,3 +205,8 @@ CCTV-高网,rtsp://113.136.42.39:554/PLTV/88888888/224/0/3221225554/iptv19039.sm
 科技探索,rtsp://113.136.42.41:554/PLTV/88888888/224/0/3221225593/iptv19079.smil
 
 自然大观,rtsp://113.136.42.39:554/PLTV/88888888/224/0/3221225594/iptv19080.smil
+*.js linguist-language=UTF-8
+
+*.css linguist-language=UTF-8
+
+*.html linguist-language=UTF-8
