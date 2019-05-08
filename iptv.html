@@ -878,16 +878,7 @@ function initialize() {
   }
 }
 
-formToggle.addEventListener("click", function(e) {
-  e.preventDefault();
-  loginForm.classList.toggle('hidden');
-  regForm.classList.toggle('hidden');
-  if (formToggle.textContent === '注册') {
-    formToggle.textContent = '登录';
-  } else {
-    formToggle.textContent = '注册';
-  }
-});
+
 
 //regAccField.addEventListener("change", uniqueName);
 regAccField.addEventListener("change", regImg);
