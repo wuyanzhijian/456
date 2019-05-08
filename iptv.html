@@ -195,6 +195,13 @@
       <h1>
         <a href="https://github.com/woniuzfb/iptv" target="_blank">HBO中文直播</a>
       </h1>
+
+      <a href="https://github.com/woniuzfb/iptv" target="_blank" class="github-corner">
+        <svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true">
+          <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+          <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+          <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+        </svg>
       </a>
     </header>
     <video id="video" controls></video>
@@ -226,6 +233,7 @@
         <ul></ul>
       </div>
     </section>
+
     <footer>
       By MTimer<span>&bull;</span>
       <a href="https://github.com/woniuzfb/iptv" target="_blank">@iptv</a>
@@ -373,7 +381,262 @@ function hlsLoad(url) {
   }
 }
 
+function playVideo(sourceName,programid) {
+  let url;
+  for (let index = 0; index < sourcesJson.data.length; index++) {
+    const source = sourcesJson.data[index];
+    if (source.name === sourceName) {
+      if (sourceName !== 'hbohd') {
+        if (Cookies.get(sourceName) && Cookies.get(sourceName) !== 'undefined') {
+          url = source.play_url+'?playtype=live&protocol=hls&accesstoken='+Cookies.get(sourceName)+'&playtoken=ABCDEFGHIGK&programid='+programid;
+          hlsLoad(url);
+        } else {
+          alertInfo("此服务端未注册或登录！\n请先注册或登录！");
+          sourceNow = sourceName;
+          formToggle.click();
+        }
+      } else {
+        for (let a = 0; a < source.channels.length; a++) {
+          const channel = source.channels[a];
+          if (channel.chnl_name === programid) {
+            url = channel.url;
+            hlsLoad(url);
+          }
+        }
+      }
+    }
+  }
+}
 
+function reqData(url, data, method = 'GET') {
+  if (method === 'GET') {
+    return fetch(url + data, {
+      method: method,
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "omit",
+      headers: {
+        "Content-Type": 'application/x-www-form-urlencoded',
+      },
+      referrer: "no-referrer",
+    }).then(response => response.json());
+  } else {
+    return fetch(url, {
+      method: method,
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "omit",
+      referrer: "no-referrer",
+      body: JSON.stringify(data),
+    }).then(response => response.json());
+  }
+}
+
+function alertInfo(info) {
+  infoField.textContent = info;
+  setTimeout(function run() {
+    infoField.textContent = '';
+  }, 3000);
+}
+
+function uniqueName() {
+  let url;
+  for (let index = 0; index < sourcesJson.data.length; index++) {
+    const source = sourcesJson.data[index];
+    if (source.name === 'jscnwx') {
+      url = source.unique_url;
+    }
+  }
+  reqData(url,'?accounttype=1&username='+regAccField.value)
+  .then(response => {
+    if (response.ret !== 0) {
+      alertInfo("用户名已存在\n请重新输入！");
+    }
+  }).catch(err => console.log('发生错误:', err));
+}
+
+function regImg() {
+  let tokenUrl,imgUrl;
+  for (let index = 0; index < sourcesJson.data.length; index++) {
+    const source = sourcesJson.data[index];
+    if (source.name === sourceNow) {
+      tokenUrl = source.token_url;
+      imgUrl = source.img_url;
+    }
+  }
+  reqData(tokenUrl,{"usagescen":1},'POST')
+  .then(response => {
+    if (response.ret !== 0) {
+      alertInfo("验证码请求错误！");
+    } else {
+      reqData(imgUrl,'?accesstoken='+response.access_token)
+      .then(response => {
+        const newImage = document.createElement('img');
+        newImage.src = response.image.replace('\\','/');
+        regImgField.innerHTML = newImage.outerHTML;
+        regImgIdField.value = response.picid;
+      }).catch(err => console.log('发生错误:', err));
+    }
+  }).catch(err => console.log('发生错误:', err));
+}
+
+function reqSms() {
+  let regAcc = regAccField.value;
+  let regImgTxt = regImgTxtField.value;
+  let regImgId = regImgIdField.value;
+  let url;
+  for (let index = 0; index < sourcesJson.data.length; index++) {
+    const source = sourcesJson.data[index];
+    if (source.name === sourceNow) {
+      url = source.sms_url;
+    }
+  }
+  reqData(url,'?pincode='+regImgTxt+'&picid='+regImgId+'&verifytype=3&account='+regAcc+'&accounttype=1')
+  .then(response => {
+    if (response.ret !== 0) {
+      alertInfo("验证码或其它错误！\n请重新输入！");
+    } else {
+      alertInfo("短信已发送！");
+    }
+  }).catch(err => console.log('发生错误:', err));
+}
+
+function reqReg() {
+  let acc = regAccField.value;
+  let pwd = regPwdField.value;
+  let jscnwxUrl,sourceNowVerifyUrl,sourceNowRegUrl,sourceNowAccType;
+  for (let index = 0; index < sourcesJson.data.length; index++) {
+    const source = sourcesJson.data[index];
+    if (source.name === 'jscnwx') {
+      jscnwxUrl = source.reg_url;
+    } else if (source.name === sourceNow) {
+      sourceNowVerifyUrl = source.verify_url;
+      sourceNowRegUrl = source.reg_url;
+      sourceNowAccType = source.acc_type;
+    }
+  }
+
+  if (!Cookies.get('jscnwx')) {
+    reqData(jscnwxUrl,'?username='+regAccField.value+'&iconid=1&pwd='+md5(pwd)+'&birthday=1970-1-1&type=1&accounttype=1')
+    .then(response => {
+      if (response.ret !== 0) {
+        alertInfo('jscnwx 注册失败，请重试！');
+      }
+    }).catch(err => console.log('发生错误:', err));
+  }
+
+  let smsCode = regSmsField.value;
+  reqData(sourceNowVerifyUrl,'?verifycode='+smsCode+'&verifytype=3&username='+acc+'&account='+acc)
+  .then(response => {
+    if (response.ret === 0) {
+      let user = {};
+      user["account"] = acc.toString();
+      let deviceno = makeStr(8)+"-"+makeStr(4)+"-"+makeStr(4)+"-"+makeStr(4)+"-"+makeStr(12);
+      user["deviceno"] = deviceno+md5(deviceno).substring(7, 8);
+      user["devicetype"] = "yuj";
+      user["code"] = response.code;
+      timestamp = Date.now();
+      user["signature"] = md5(user["account"]+'|'+md5(pwd)+'|'+user["deviceno"]+'|'+user["devicetype"]+'|'+timestamp);
+      user["birthday"] = "1970-1-1";
+      user["username"] = user["account"];
+      user["type"] = 1;
+      user["timestamp"] = timestamp.toString();
+      user["pwd"] = md5(pwd);
+      user["accounttype"] = sourceNowAccType;
+
+      reqData(sourceNowRegUrl,user,'POST')
+      .then(response => {
+        if (response.ret === 0) {
+          formToggle.click();
+          loginAccField.value = user["account"];
+          loginPwdField.value = pwd;
+          regAccField.value = '';
+          regPwdField.value = '';
+          regImgTxtField.value = '';
+          regSmsField.value = '';
+          Cookies.set('account', acc, { expires: 7 });
+          Cookies.set('password', pwd, { expires: 7 });
+          alertInfo("注册成功!");
+          reqLogin();
+        }
+      }).catch(err => console.log('发生错误:', err));
+    } else {
+      alertInfo("注册失败,请重试！");
+    }
+  }).catch(err => console.log('发生错误:', err));
+}
+
+function reqLogin() {
+  let acc = loginAccField.value;
+  let pwd = loginPwdField.value;
+  let deviceno,devicetype,isforce,accounttype,jscnwxRegUrl,jscnwxLoginUrl,sourceNowUrl,sourceNowExtendInfo,sourceNowServerVersion;
+  acc = acc.toString();
+  deviceno = makeStr(8)+"-"+makeStr(4)+"-"+makeStr(4)+"-"+makeStr(4)+"-"+makeStr(12);
+  deviceno = deviceno + md5(deviceno).substring(7, 8);
+  devicetype = 3;
+  isforce = 1;
+  accounttype = 2;
+
+  for (let index = 0; index < sourcesJson.data.length; index++) {
+    const source = sourcesJson.data[index];
+    if (source.name === 'jscnwx') {
+      jscnwxRegUrl = source.reg_url;
+      jscnwxLoginUrl = source.login_url;
+    } else if (source.name === sourceNow) {
+      sourceNowUrl = source.login_url;
+      sourceNowExtendInfo = source.extend_info;
+      if (source.server_version) {
+        sourceNowServerVersion = source.server_version;
+      }
+    }
+  }
+  reqData(jscnwxLoginUrl,'?deviceno='+deviceno+'&devicetype='+devicetype+'&accounttype='+accounttype+'&accesstoken=(null)&account='+acc+'&pwd='+md5(pwd)+'&isforce='+isforce)
+  .then(response => {
+    if (response.ret === 0) {
+      Cookies.set('jscnwx', response.access_token, { expires: 7 });
+    } else {
+      reqData(jscnwxRegUrl,'?username='+acc+'&iconid=1&pwd='+md5(pwd)+'&birthday=1970-1-1&type=1&accounttype=1')
+      .then(response => {
+        if (response.ret !== 0) {
+          alertInfo('高清[电信]不可用！');
+        } else {
+          Cookies.set('jscnwx', response.access_token, { expires: 7 });
+        }
+      }).catch(err => console.log('发生错误:', err));
+    }
+  }).catch(err => console.log('发生错误:', err));
+
+  let user = {};
+  user["account"] = acc.toString();
+  user["deviceno"] = makeStr(8)+"-"+makeStr(4)+"-"+makeStr(4)+"-"+makeStr(4)+"-"+makeStr(12);
+  user["deviceno"] = user["deviceno"] + md5(user["deviceno"]).substring(7, 8);
+  user["businessplatform"] = 1;
+  user["devicetype"] = "yuj";
+  user["extendinfo"] = sourceNowExtendInfo;
+  let timestamp = Date.now();
+  user["signature"] = md5(user["deviceno"]+"|"+user["devicetype"]+"|3|"+user["account"]+"|"+timestamp);
+  user["isforce"] = 1;
+  user["timestamp"] = timestamp.toString();
+  user["pwd"] = md5(pwd);
+  user["accounttype"] = 3;
+  if (sourceNowServerVersion) {
+    user["serverVersion"] = sourceNowServerVersion;
+  }
+
+  reqData(sourceNowUrl,user,'POST')
+  .then(response => {
+    if (response.ret !== 0) {
+      alertInfo('账号错误！');
+    } else {
+      Cookies.set('account', user["account"], { expires: 7 });
+      Cookies.set('password', pwd, { expires: 7 });
+      Cookies.set(sourceNow, response.access_token, { expires: 7 });
+      Cookies.set('deviceid', response.device_id, { expires: 7 });
+      initialize();
+      playVideo('nx96200',hboId);
+    }
+  }).catch(err => console.log('发生错误:', err));
+}
 
 function appendList(channel,sourceName,sourceLane) {
   const channelListItem = document.createElement('li');
@@ -585,7 +848,16 @@ function initialize() {
   }
 }
 
-
+formToggle.addEventListener("click", function(e) {
+  e.preventDefault();
+  loginForm.classList.toggle('hidden');
+  regForm.classList.toggle('hidden');
+  if (formToggle.textContent === '注册') {
+    formToggle.textContent = '登录';
+  } else {
+    formToggle.textContent = '注册';
+  }
+});
 
 //regAccField.addEventListener("change", uniqueName);
 regAccField.addEventListener("change", regImg);
@@ -596,7 +868,9 @@ loginBtn.addEventListener("click", reqLogin);
 channelsField.addEventListener("click", switchChannel);
 categoriesField.addEventListener("click", switchCategory);
 
-
+if (Cookies.get('dark') === '1'){
+  switchBtn.click();
+}
   </script>
 </body>
 </html>
